@@ -1,4 +1,5 @@
-﻿using DapperUsageConsole.Repositories;
+﻿using DapperUsageConsole.Models;
+using DapperUsageConsole.Repositories;
 using Microsoft.Extensions.Configuration;
 
 namespace DapperUsageConsole
@@ -16,49 +17,41 @@ namespace DapperUsageConsole
 
             var userRepository = new UserRepository(connectionString);
 
+            // Example user ID to search for
+            int userIdToFind = 13; // You can change this to test different IDs
 
+            // Search and display user
+            await SearchAndDisplayUser(userRepository, userIdToFind);
+
+            // Example user ID to delete
+            int userIdToDelete = 5; // Change this ID based on your data
+
+            // Delete user and display result
+            await DeleteUserAndDisplayResult(userRepository, userIdToDelete);
+
+            // Generate a new random user
+            var newUser = User.GenerateRandomUser();
+
+            // Add the new user to the database and get their ID
+            var userId = await userRepository.AddUserAsync(newUser);
+            Console.WriteLine($"Added new user with ID: {userId}");
+
+            // Optionally, retrieve and display the newly added user's details
+            var addedUser = await userRepository.GetUserAsync(userId);
+            if (addedUser != null)
+            {
+                Console.WriteLine($"New User Details: ID: {addedUser.Id}, Username: {addedUser.Username}, Email: {addedUser.Email}, CreatedDate: {addedUser.CreatedDate}");
+            }
+
+            // Example user ID and new email to update
+            int userIdToUpdate = 1; // Specify the user ID you want to update
+            string newUserEmail = "newemail@example.com"; // Specify the new email
+
+            // Update user email and display result
+            await UpdateUserEmailAndDisplayResult(userRepository, userIdToUpdate, newUserEmail);
+
+            // Listing all users
             await ListAllUsersAsync(userRepository);
-
-
-
-            //// Example user ID to search for
-            //int userIdToFind = 13; // You can change this to test different IDs
-
-            //// Search and display user
-            //await SearchAndDisplayUser(userRepository, userIdToFind);
-
-
-
-            //// Example user ID to delete
-            //int userIdToDelete = 5; // Change this ID based on your data
-
-            //// Delete user and display result
-            //await DeleteUserAndDisplayResult(userRepository, userIdToDelete);
-
-
-
-            //// Generate a new random user
-            //var newUser = User.GenerateRandomUser();
-
-            //// Add the new user to the database and get their ID
-            //var userId = await userRepository.AddUserAsync(newUser);
-            //Console.WriteLine($"Added new user with ID: {userId}");
-
-            //// Optionally, retrieve and display the newly added user's details
-            //var addedUser = await userRepository.GetUserAsync(userId);
-            //if (addedUser != null)
-            //{
-            //    Console.WriteLine($"New User Details: ID: {addedUser.Id}, Username: {addedUser.Username}, Email: {addedUser.Email}, CreatedDate: {addedUser.CreatedDate}");
-            //}
-
-
-
-            //// Example user ID and new email to update
-            //int userIdToUpdate = 1; // Specify the user ID you want to update
-            //string newUserEmail = "newemail@example.com"; // Specify the new email
-
-            //// Update user email and display result
-            //await UpdateUserEmailAndDisplayResult(userRepository, userIdToUpdate, newUserEmail);
 
         }
 
